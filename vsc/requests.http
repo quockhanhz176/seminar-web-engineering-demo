@@ -1,0 +1,85 @@
+GET {{baseUrl}}/
+accept: application/json;odata.metadata=full
+
+###
+
+GET {{baseUrl}}/groups
+accept: application/json;odata.metadata=full
+
+###
+
+GET {{baseUrl}}/Groups(37)
+accept: application/json;odata.metadata=full
+
+###
+
+GET {{baseUrl}}/Groups(1)/Students
+accept: application/json;odata.metadata=full
+
+###
+
+GET {{baseUrl}}/Students
+accept: application/json;odata.metadata=full
+
+
+###
+
+GET {{baseUrl}}/Students(1)
+accept: application/json;odata.metadata=full
+
+###
+
+GET {{baseUrl}}/Students(1)/group
+accept: application/json;odata.metadata=full
+
+###
+
+POST {{baseUrl}}/Students(1)/Group(2)/$ref
+accept: application/json;odata.metadata=full
+
+###
+
+# PUT {{baseUrl}}/Students(1)/Group/$ref
+# accept: application/json;odata.metadata=full
+
+# {
+#     "@odata.id": "http://localhost:5139/Groups(2)"
+# }
+###
+
+DELETE {{baseUrl}}/Students(1)/Group/$ref
+accept: application/json;odata.metadata=full
+
+###
+
+OPTIONS  {{baseUrl}}/Students(1)/Group(2)/$ref
+
+###
+
+POST {{baseUrl}}/Students
+content-type: application/json
+
+{
+    "Id": 7,
+    "FirstName": "Abraham",
+    "LastName": "Shoeperson",
+    "DateOfBirth": "1999-01-01",
+    "Email": "as@random-tu.de",
+    "GroupId": 1,
+    "Group": null
+}
+
+###
+
+POST {{baseUrl}}/Groups
+content-type: application/json
+
+{
+    "Id": 7,
+    "Name": "Group 7",
+    "Students": []
+}
+
+###
+
+GET http://localhost:5139/$metadata#Students
