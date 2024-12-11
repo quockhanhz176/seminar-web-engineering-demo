@@ -1,11 +1,13 @@
 ﻿using demo_project.Controllers.DataPkg;
 using demo_project.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Deltas;
 using Microsoft.AspNetCore.OData.Extensions;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.OData.Edm;
 using Microsoft.OData.UriParser;
+using System.Reflection;
 
 namespace demo_project.Controllers;
 
@@ -32,7 +34,7 @@ public class StudentsController : ODataController
     [HttpPost]
     public ActionResult Post([FromBody] Student student)
     {
-        if (!Data.Groups.Any(g => g.Id == student.GroupId))
+        if (student.GroupId != null && !Data.Groups.Any(g => g.Id == student.GroupId))
         {
             return NotFound();
         }
@@ -164,5 +166,67 @@ public class StudentsController : ODataController
         }
 
         return true;
+    }
+
+    public ActionResult Put([FromRoute] int key, [FromBody] Student student)
+    {
+        var item = Data.Students.SingleOrDefault(d => d.Id == key);
+
+        if (item == null)
+        {
+            return NotFound();
+        }
+        else if (!item.GetType().Equals(student.GetType()))
+        {
+            return BadRequest();
+        }
+
+        // Update properties using reflection
+        foreach (var propertyInfo in student.GetType().GetProperties(
+            BindingFlags.Public | BindingFlags.Instance))
+        {
+            var itemPropertyInfo = item.GetType().GetProperty(
+                propertyInfo.Name,
+                BindingFlags.Public | BindingFlags.Instance);
+
+            if (itemPropertyInfo.CanWrite)
+            {
+                itemPropertyInfo.SetValue(item, propertyInfo.GetValue(student));
+            }
+        }
+
+        return Ok();
+    }
+
+    public ActionResult Patch([FromRoute] int key, [FromBody] Delta<Student> delta)
+    {
+        var student = Data.Students.SingleOrDefault(d => d.Id == key);
+
+        if (student == null)
+        {
+            return NotFound();
+        }
+        else if (!student.GetType().Equals(delta.StructuredType))
+        {
+            return BadRequest();
+        }
+
+        delta.Patch(student);
+
+        return Ok();
+    }
+
+    public ActionResult Delete([FromRoute] int key)
+    {
+        var student = Data.Students.SingleOrDefault(d => d.Id == key);
+
+        if (student == null)
+        {
+            return NotFound();
+        }
+
+        Data.RemoveStudent(student.Id);
+
+        return NoContent();
     }
 }

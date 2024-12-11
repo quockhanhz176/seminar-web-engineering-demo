@@ -1,35 +1,20 @@
-GET {{baseUrl}}/
-accept: application/json;odata.metadata=full
-
-###
-
-GET {{baseUrl}}/groups
-accept: application/json;odata.metadata=full
-
-###
-
-GET {{baseUrl}}/Groups(37)
-accept: application/json;odata.metadata=full
-
-###
-
-GET {{baseUrl}}/Groups(1)/Students
-accept: application/json;odata.metadata=full
-
-###
-
 GET {{baseUrl}}/Students
 accept: application/json;odata.metadata=full
 
-
 ###
 
-GET {{baseUrl}}/Students(1)
+GET {{baseUrl}}/Students?$orderby=DateOfBirth
 accept: application/json;odata.metadata=full
 
 ###
 
-GET {{baseUrl}}/Students(1)/group
+
+GET {{baseUrl}}/Students(4)
+accept: application/json;odata.metadata=full
+
+###
+
+GET {{baseUrl}}/Students(4)/group
 accept: application/json;odata.metadata=full
 
 ###
@@ -39,12 +24,13 @@ accept: application/json;odata.metadata=full
 
 ###
 
-# PUT {{baseUrl}}/Students(1)/Group/$ref
-# accept: application/json;odata.metadata=full
+POST {{baseUrl}}/Students(4)/Group/$ref
+Content-Type: application/json
+accept: application/json;odata.metadata=full
 
-# {
-#     "@odata.id": "http://localhost:5139/Groups(2)"
-# }
+{
+    "@odata.id": "http://localhost:5139/Groups(2)"
+}
 ###
 
 DELETE {{baseUrl}}/Students(1)/Group/$ref
@@ -60,7 +46,7 @@ POST {{baseUrl}}/Students
 content-type: application/json
 
 {
-    "Id": 7,
+    "Id": 8,
     "FirstName": "Abraham",
     "LastName": "Shoeperson",
     "DateOfBirth": "1999-01-01",
@@ -71,15 +57,20 @@ content-type: application/json
 
 ###
 
-POST {{baseUrl}}/Groups
+PUT {{baseUrl}}/Students(4)
 content-type: application/json
 
 {
-    "Id": 7,
-    "Name": "Group 7",
-    "Students": []
+    "Id": 1,
+    "FirstName": "Abraham Lincoln",
+    "LastName": "Randuin",
+    "DateOfBirth": "1999-01-01",
+    "Email": "alr@random-tu.de",
+    "GroupId": 2,
+    "Group": null
 }
 
 ###
+
 
 GET http://localhost:5139/$metadata#Students

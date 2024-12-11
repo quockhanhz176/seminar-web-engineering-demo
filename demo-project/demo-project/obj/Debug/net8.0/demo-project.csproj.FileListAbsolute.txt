@@ -36,3 +36,4 @@ E:\Chemnitz-TU\Semester-1\seminar-web-engineering\demo\demo-project\demo-project
 E:\Chemnitz-TU\Semester-1\seminar-web-engineering\demo\demo-project\demo-project\obj\Debug\net8.0\demo-project.pdb
 E:\Chemnitz-TU\Semester-1\seminar-web-engineering\demo\demo-project\demo-project\obj\Debug\net8.0\demo-project.genruntimeconfig.cache
 E:\Chemnitz-TU\Semester-1\seminar-web-engineering\demo\demo-project\demo-project\obj\Debug\net8.0\ref\demo-project.dll
+E:\Chemnitz-TU\Semester-1\seminar-web-engineering\demo\demo-project\demo-project\obj\Debug\net8.0\demo-project.sourcelink.json

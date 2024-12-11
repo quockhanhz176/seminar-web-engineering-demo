@@ -4,13 +4,16 @@ namespace demo_project.Controllers.DataPkg;
 
 public class Data
 {
+    private static uint studentRandomNumber = 02342506578;
+    private static uint groupRandomNumber = 1923003578;
+
     private static List<Group> _groups = [
         new Group() { Id = 1, Name = "Group 1"},
         new Group() { Id = 2, Name = "Group two"},
         new Group() { Id = 37, Name = "373737"}
     ];
 
-    private static IEnumerable<Student> _students = [
+    private static List<Student> _students = [
         new Student(){
             Id = 1,
             FirstName = "Mike",
@@ -69,6 +72,18 @@ public class Data
         },
         ];
 
+    static Data()
+    {
+        foreach (var item in _students)
+        {
+            item.Id = item.Id ^ studentRandomNumber;
+        }
+        foreach (var item in _groups)
+        {
+            item.Id = item.Id ^ groupRandomNumber;
+        }
+    }
+
     public static IEnumerable<Student> Students
     {
         get => _students.Select(s =>
@@ -89,6 +104,11 @@ public class Data
 
     public static void AddStudent(Student student)
     {
-        _students.Append(student);
+        _students.Add(student);
+    }
+
+    public static void RemoveStudent(uint id)
+    {
+        _students.RemoveAll(s => s.Id == id);
     }
 }

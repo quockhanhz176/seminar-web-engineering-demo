@@ -1,0 +1,33 @@
+GET {{baseUrl}}/
+accept: application/json;odata.metadata=full
+
+###
+
+GET {{baseUrl}}/groups
+accept: application/json;odata.metadata=full
+
+###
+
+GET {{baseUrl}}/Groups(1)
+accept: application/json;odata.metadata=full
+
+###
+
+GET {{baseUrl}}/Groups(1)/Students
+accept: application/json;odata.metadata=full
+
+###
+
+POST {{baseUrl}}/Groups
+accept: application/json;odata.metadata=full
+content-type: application/json
+
+{
+    "Id": 7,
+    "Name": "Group 7",
+    "Students": []
+}
+
+###
+
+GET http://localhost:5139/$metadata
