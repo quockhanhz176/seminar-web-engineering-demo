@@ -46,6 +46,10 @@ public class StudentsController : ODataController
         {
             return NotFound();
         }
+        if (Data.Students.Any(s => s.Id == student.Id))
+        {
+            return Conflict();
+        }
 
         Data.AddStudent(student);
         student.Group = Data.Groups.SingleOrDefault(g => g.Id == student.GroupId);
@@ -178,7 +182,7 @@ public class StudentsController : ODataController
 
     public ActionResult Put([FromRoute] uint key, [FromBody] Student student)
     {
-        var item = Data.Students.SingleOrDefault(d => d.Id == key);
+        var item = Data.Students.FirstOrDefault(d => d.Id == key);
 
         if (item == null)
         {

@@ -1,11 +1,11 @@
 GET {{baseUrl}}/Students
 accept: application/json;odata.metadata=full
-If-Modified-Since: Thu, 12 Dec 2024 01:32:46 GMT
+# If-Modified-Since: Thu, 12 Dec 2024 01:32:46 GMT
 
 ###
 
 GET {{baseUrl}}/Students?$select=DateOfBirth,FirstName,LastName&orderby=DateOfBirth
-accept: application/json;odata.metadata
+accept: application/json;odata.metadata=full
 
 ###
 
@@ -37,7 +37,7 @@ accept: application/json;odata.metadata=full
 }
 ###
 
-DELETE {{baseUrl}}/Students(1)/Group/$ref
+DELETE {{baseUrl}}/Students(2342506579)/Group/$ref
 accept: application/json;odata.metadata=full
 
 ###
