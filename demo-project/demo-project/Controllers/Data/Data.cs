@@ -6,6 +6,7 @@ public class Data
 {
     private static uint studentRandomNumber = 02342506578;
     private static uint groupRandomNumber = 1923003578;
+    public static DateTime StudentLastModified { get; private set; } = DateTime.UtcNow;
 
     private static List<Group> _groups = [
         new Group() { Id = 1, Name = "Group 1"},
@@ -77,6 +78,7 @@ public class Data
         foreach (var item in _students)
         {
             item.Id = item.Id ^ studentRandomNumber;
+            item.GroupId = item.GroupId ^ groupRandomNumber;
         }
         foreach (var item in _groups)
         {
@@ -105,10 +107,17 @@ public class Data
     public static void AddStudent(Student student)
     {
         _students.Add(student);
+        ResetStudentLastModified();
     }
 
     public static void RemoveStudent(uint id)
     {
         _students.RemoveAll(s => s.Id == id);
+        ResetStudentLastModified();
+    }
+
+    public static void ResetStudentLastModified()
+    {
+        StudentLastModified = DateTime.UtcNow;
     }
 }

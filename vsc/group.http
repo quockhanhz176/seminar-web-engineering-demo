@@ -8,12 +8,12 @@ accept: application/json;odata.metadata=full
 
 ###
 
-GET {{baseUrl}}/Groups(1)
+GET {{baseUrl}}/Groups(1923003579)
 accept: application/json;odata.metadata=full
 
 ###
 
-GET {{baseUrl}}/Groups(1)/Students
+GET {{baseUrl}}/Groups(1923003579)/Students
 accept: application/json;odata.metadata=full
 
 ###

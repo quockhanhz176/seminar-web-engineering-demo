@@ -29,8 +29,12 @@ public class GroupsController : ODataController
     }
 
     [EnableQuery]
-    public IActionResult GetStudents([FromRoute] int key)
+    public IActionResult GetStudents([FromRoute] uint key)
     {
+        if (!Data.Groups.Any(g => g.Id == key))
+        {
+            return NotFound();
+        }
         var students = Data.Students.Where(s => s.GroupId == key);
         return Ok(students);
     }

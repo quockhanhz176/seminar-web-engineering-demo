@@ -13,8 +13,16 @@ namespace demo_project.Controllers;
 
 public class StudentsController : ODataController
 {
+    [EnableQuery]
     public ActionResult<IEnumerable<Student>> Get()
     {
+        var header = Request.GetTypedHeaders();
+        if (header.IfModifiedSince.HasValue && (int)((DateTimeOffset)header.IfModifiedSince - Data.StudentLastModified).TotalSeconds >= 0)
+        {
+            return StatusCode(StatusCodes.Status304NotModified);
+        }
+
+        this.Response.GetTypedHeaders().LastModified = Data.StudentLastModified;
         return Ok(Data.Students);
     }
 
@@ -45,7 +53,7 @@ public class StudentsController : ODataController
     }
 
     [EnableQuery]
-    public IActionResult CreateRef([FromRoute] int key, [FromRoute] int relatedKey, [FromRoute] string navigationProperty)
+    public IActionResult CreateRef([FromRoute] uint key, [FromRoute] uint relatedKey, [FromRoute] string navigationProperty)
     {
         if (navigationProperty != "Group")
         {
@@ -66,7 +74,7 @@ public class StudentsController : ODataController
         return NoContent();
     }
 
-    public IActionResult CreateRef([FromRoute] int key, [FromRoute] string navigationProperty, [FromBody] Uri link)
+    public IActionResult CreateRef([FromRoute] uint key, [FromRoute] string navigationProperty, [FromBody] Uri link)
     {
         if (navigationProperty != "Group")
         {
@@ -80,7 +88,7 @@ public class StudentsController : ODataController
             return BadRequest();
         }
 
-        int relatedKey;
+        uint relatedKey;
         // The code for TryParseRelatedKey is shown a little further below
         if (!TryParseRelatedKey(link, out relatedKey))
         {
@@ -101,7 +109,7 @@ public class StudentsController : ODataController
     }
 
     [EnableQuery]
-    public IActionResult DeleteRef([FromRoute] int key, [FromRoute] string navigationProperty)
+    public IActionResult DeleteRef([FromRoute] uint key, [FromRoute] string navigationProperty)
     {
         if (navigationProperty != "Group")
         {
@@ -121,7 +129,7 @@ public class StudentsController : ODataController
     }
 
     [EnableQuery]
-    public IActionResult GetGroup([FromRoute] int key)
+    public IActionResult GetGroup([FromRoute] uint key)
     {
         var student = Data.Students.SingleOrDefault(s => s.Id == key);
         if (student == null)
@@ -148,7 +156,7 @@ public class StudentsController : ODataController
         return Ok(student.Group);
     }
 
-    private bool TryParseRelatedKey(Uri link, out int relatedKey)
+    private bool TryParseRelatedKey(Uri link, out uint relatedKey)
     {
         relatedKey = 0;
 
@@ -160,7 +168,7 @@ public class StudentsController : ODataController
         ODataPath odataPath = uriParser.ParsePath();
         KeySegment keySegment = odataPath.OfType<KeySegment>().LastOrDefault();
 
-        if (keySegment == null || !int.TryParse(keySegment.Keys.First().Value.ToString(), out relatedKey))
+        if (keySegment == null || !uint.TryParse(keySegment.Keys.First().Value.ToString(), out relatedKey))
         {
             return false;
         }
@@ -168,7 +176,7 @@ public class StudentsController : ODataController
         return true;
     }
 
-    public ActionResult Put([FromRoute] int key, [FromBody] Student student)
+    public ActionResult Put([FromRoute] uint key, [FromBody] Student student)
     {
         var item = Data.Students.SingleOrDefault(d => d.Id == key);
 
@@ -194,11 +202,12 @@ public class StudentsController : ODataController
                 itemPropertyInfo.SetValue(item, propertyInfo.GetValue(student));
             }
         }
+        Data.ResetStudentLastModified();
 
         return Ok();
     }
 
-    public ActionResult Patch([FromRoute] int key, [FromBody] Delta<Student> delta)
+    public ActionResult Patch([FromRoute] uint key, [FromBody] Delta<Student> delta)
     {
         var student = Data.Students.SingleOrDefault(d => d.Id == key);
 
@@ -212,11 +221,12 @@ public class StudentsController : ODataController
         }
 
         delta.Patch(student);
+        Data.ResetStudentLastModified();
 
         return Ok();
     }
 
-    public ActionResult Delete([FromRoute] int key)
+    public ActionResult Delete([FromRoute] uint key)
     {
         var student = Data.Students.SingleOrDefault(d => d.Id == key);
 

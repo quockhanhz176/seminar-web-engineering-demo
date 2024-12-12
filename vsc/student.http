@@ -1,20 +1,24 @@
 GET {{baseUrl}}/Students
 accept: application/json;odata.metadata=full
+If-Modified-Since: Thu, 12 Dec 2024 01:32:46 GMT
 
 ###
 
-GET {{baseUrl}}/Students?$orderby=DateOfBirth
+GET {{baseUrl}}/Students?$select=DateOfBirth,FirstName,LastName&orderby=DateOfBirth
+accept: application/json;odata.metadata
+
+###
+
+GET {{baseUrl}}/Students?$filter=LastName eq 'Tailor'
+accept: application/json;odata.metadata=full
+
+###
+GET {{baseUrl}}/Students(2342506579)
 accept: application/json;odata.metadata=full
 
 ###
 
-
-GET {{baseUrl}}/Students(4)
-accept: application/json;odata.metadata=full
-
-###
-
-GET {{baseUrl}}/Students(4)/group
+GET {{baseUrl}}/Students(2342506579)/group
 accept: application/json;odata.metadata=full
 
 ###
@@ -24,12 +28,12 @@ accept: application/json;odata.metadata=full
 
 ###
 
-POST {{baseUrl}}/Students(4)/Group/$ref
+POST {{baseUrl}}/Students(2342506579)/Group/$ref
 Content-Type: application/json
 accept: application/json;odata.metadata=full
 
 {
-    "@odata.id": "http://localhost:5139/Groups(2)"
+    "@odata.id": "http://localhost:5139/Groups(1923003551)"
 }
 ###
 
@@ -46,31 +50,34 @@ POST {{baseUrl}}/Students
 content-type: application/json
 
 {
-    "Id": 8,
+    "Id": 19267897,
     "FirstName": "Abraham",
     "LastName": "Shoeperson",
     "DateOfBirth": "1999-01-01",
     "Email": "as@random-tu.de",
-    "GroupId": 1,
+    "GroupId": 1923003579,
     "Group": null
 }
 
 ###
 
-PUT {{baseUrl}}/Students(4)
+PUT {{baseUrl}}/Students(19267897)
 content-type: application/json
 
 {
-    "Id": 1,
+    "Id": 19267897,
     "FirstName": "Abraham Lincoln",
     "LastName": "Randuin",
     "DateOfBirth": "1999-01-01",
     "Email": "alr@random-tu.de",
-    "GroupId": 2,
+    "GroupId": 1923003579,
     "Group": null
 }
 
 ###
 
+DELETE {{baseUrl}}/Students(19267897)
+
+###
 
 GET http://localhost:5139/$metadata#Students
